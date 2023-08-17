@@ -22,4 +22,18 @@ contract ExchangeTest is Test {
         assertEq(address(exchange).balance, 100 * 10**18);
         assertEq(exchange.getReserve(), 200 * 10**18);
     }
+
+    function testGetTknAmount() public {
+        token.approve(address(exchange), 2000 * 10**18);
+        exchange.addLiquidity{value: 1000 * 10**18}(2000 * 10**18);
+
+        uint256 tokensOut = exchange.getTknAmount(1 * 10**18);
+        assertEq(tokensOut, 1998001998001998001);
+
+        tokensOut = exchange.getTknAmount(100 * 10**18);
+        assertEq(tokensOut, 181818181818181818181);
+
+        tokensOut = exchange.getTknAmount(1000 * 10**18);
+        assertEq(tokensOut, 1000 * 10**18);
+    }
 }
